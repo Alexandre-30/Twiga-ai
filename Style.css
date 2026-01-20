@@ -1,0 +1,74 @@
+body {
+    font-family: cursive;
+    background-color:white;
+}
+h1{
+    color: rgb(0, 0, 0);
+    text-align: center;
+    padding: 20px;
+    font-size: 50px;
+}
+input{
+    font-size:20px;
+    font-family: cursive;
+    font-weight: bold;
+    margin-left: 560px; 
+    margin-top: 400px;
+    padding: 90px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 7px 1px rgba(0, 0, 0, 0.1);
+}
+div{
+    font-size: 20px;
+    font-family: cursive;
+    margin-left: 20px;
+    padding: 10px;
+
+}
+button{
+    background-color: white;
+}
+p{
+    font-family: cursive;
+    text-align: center;
+}
+
+#Warning{
+    color:rgb(203, 33, 33);
+    font-family:cursive;
+    margin-left:0px; 
+    margin-top:-90px;
+    padding: 90px;
+}
+#Update{
+    color:rgb(203, 33, 33);
+    font-family:cursive;
+    margin-left:0px; 
+    margin-top:-70px;
+    padding: 90px;
+}
+.bot-message {
+   position: relative;
+   border-radius: 20px;
+   padding: 10px;
+   background-color: rgb(247, 158, 4);
+   max-width: 20%;
+   word-wrap: break-word;
+   margin-left: auto; 
+   color: black;
+   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+   font-weight: bold;
+   margin-top: 30px;
+   
+}
+
+
+.user-message {
+   position: relative;
+   border-radius: 20px;
+   padding: 20px;
+   background-color: lime;
+   max-width: 20%;
+   word-wrap: break-word;
+}
