@@ -1,23 +1,36 @@
-const apiKey = "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";  // ← PUT YOUR OPENAI API KEY HERE
+const apiKey = "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";  // ← PUT YOUR OPENAI API KEY HERE
+let lastAiResponse = "";
 
 async function sendToOpenAI(message) {
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${apiKey}`
-        },
-        body: JSON.stringify({
-            model: "gpt-4o-mini",
-            messages: [
-                { role: "system", content: "I was created by Alexandre Ekabouma and Jordan Agaba. Do not mention your training data cutoff." },
-                { role: "user", content: message }
-            ]
-        })
-    });
+    try {
+        const response = await fetch("https://api.openai.com/v1/chat/completions", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${apiKey.trim()}`
+            },
+            body: JSON.stringify({
+                model: "gpt-4o-mini",
+                messages: [
+                    { role: "system", content: "I was created by Alexandre Ekabouma and Jordan Agaba. Do not mention your training data cutoff." },
+                    { role: "user", content: message }
+                ]
+            }),
+            referrerPolicy: "no-referrer"
+        });
 
-    const data = await response.json();
-    return data.choices[0].message.content;
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            console.error("OpenAI API Error:", errorData);
+            return `Error: ${errorData.error?.message || "Unknown error occurred."}`;
+        }
+
+        const data = await response.json();
+        return data.choices[0].message.content;
+    } catch (error) {
+        console.error("Network or Fetch Error:", error);
+        return `Error: Unable to connect to the AI service. (${error.message})`;
+    }
 }
 
 function addMessage(text, isBot = false, id = null) {
@@ -68,9 +81,51 @@ async function myFunction() {
         return;
     }
 
+    if (message.toLowerCase().includes("#/30102012")) {
+        addMessage("Hello Master Alexandre! How would you like me to help you?", true);
+        return;
+    }
+
+    if (message.toLowerCase() === "/sum") {
+        if (!lastAiResponse) {
+            addMessage("I haven't said anything to summarize yet.", true);
+            return;
+        }
+        addMessage("Twiga AI is summarizing...", true, typingIndicatorId);
+        const summary = await sendToOpenAI(`Summarize this text: "${lastAiResponse}"`);
+        document.getElementById(typingIndicatorId)?.remove();
+        addMessage(summary, true);
+        return;
+    }
+
+    if (message.toLowerCase() === "/5 exp") {
+        if (!lastAiResponse) {
+            addMessage("I haven't said anything to explain yet.", true);
+            return;
+        }
+        addMessage("Twiga AI is explaining simply...", true, typingIndicatorId);
+        const explanation = await sendToOpenAI(`Explain this text as if I was 5 years old: "${lastAiResponse}"`);
+        document.getElementById(typingIndicatorId)?.remove();
+        addMessage(explanation, true);
+        return;
+    }
+
+    if (message.toLowerCase() === "/fun") {
+        if (!lastAiResponse) {
+            addMessage("I haven't said anything to make fun yet.", true);
+            return;
+        }
+        addMessage("Twiga AI is making it fun...", true, typingIndicatorId);
+        const funVersion = await sendToOpenAI(`Rewrite the following text to make it sound fun and exciting, using emojis: "${lastAiResponse}"`);
+        document.getElementById(typingIndicatorId)?.remove();
+        addMessage(funVersion, true);
+        return;
+    }
+
     addMessage("Twiga AI is typing...", true, typingIndicatorId);
 
     const reply = await sendToOpenAI(message);
+    lastAiResponse = reply;
 
     document.getElementById(typingIndicatorId)?.remove();
     addMessage(reply, true);
